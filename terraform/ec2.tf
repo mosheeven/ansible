@@ -22,9 +22,10 @@ resource "aws_instance" "server" {
   instance_type = "t2.micro"
   associate_public_ip_address = true
   subnet_id = var.subnet_id
-  user_data = file("install_ansible.sh")
+  user_data = file("../config/install_ansible.sh")
   vpc_security_group_ids = [aws_security_group.ansible-sgg.id]
   key_name               = var.key
+  iam_instance_profile = var.iam_role
   tags = {
     Name = "Server"
   }
@@ -40,6 +41,21 @@ resource "aws_instance" "server" {
     host     = self.public_ip
   }
 }
+
+  provisioner "remote-exec" {
+    inline = [
+      "bash /home/ubuntu/config/install_ansible.sh",
+      "ansible-playbook /home/ubuntu/config/configure-host.yml"
+    ]
+    
+  connection {
+    type     = "ssh"
+    user     = "ubuntu"
+    private_key = file("/Users/moshe.even/Documents/keys/moshe-aws.pem")
+    host     = self.public_ip
+  }
+}
+
 }
 
 resource "aws_instance" "nodes" {

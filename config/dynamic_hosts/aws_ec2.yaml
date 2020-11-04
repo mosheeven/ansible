@@ -1,0 +1,13 @@
+---
+plugin: aws_ec2
+#aws_access_key: <access was key>
+#aws_secret_key: <secret was key>
+keyed_groups:
+  - key: tags
+    #    prefix: web
+
+hostnames:
+  - private-ip-address
+
+
+# /opt/ansible/inventory/aws_ec2.yaml

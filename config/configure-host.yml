@@ -1,0 +1,25 @@
+---
+- name: "Playing with Ansible and Git"
+  hosts: 127.0.0.1
+  connection: local
+  become: yes
+  tasks:
+    - name: 
+      file:
+        path: /etc/ansible/
+        state: directory
+
+    - name: 
+      file:
+        path: /opt/ansible/inventory/
+        state: directory
+
+    - name: Copy ansible.cfg
+      copy:
+        src: ./dynamic_hosts/ansible.cfg
+        dest: /etc/ansible/
+
+    - name: Copy file aws_ec2.yaml
+      copy:
+        src: ./dynamic_hosts/aws_ec2.yaml
+        dest: /opt/ansible/inventory/

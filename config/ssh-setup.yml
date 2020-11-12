@@ -17,6 +17,7 @@
     ssh_key_filename: id_rsa_opsschool
   become: yes
 
+
   tasks:
     - name: Create new user
       user:

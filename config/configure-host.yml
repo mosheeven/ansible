@@ -19,6 +19,7 @@
         src: ./dynamic_hosts/ansible.cfg
         dest: /etc/ansible/
 
+
     - name: Copy file aws_ec2.yaml
       copy:
         src: ./dynamic_hosts/aws_ec2.yaml

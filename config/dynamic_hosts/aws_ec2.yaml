@@ -10,5 +10,4 @@ keyed_groups:
 hostnames:
   - private-ip-address
 
-
 # /opt/ansible/inventory/aws_ec2.yaml

@@ -1,5 +1,6 @@
 ---
 plugin: aws_ec2
+## no need for keys using roles on the master machine
 #aws_access_key: <access was key>
 #aws_secret_key: <secret was key>
 keyed_groups:

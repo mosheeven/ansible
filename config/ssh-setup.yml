@@ -4,25 +4,6 @@
   vars:
     ssh_key_filename: id_rsa_opsschool
   tasks:
-    # - name: Create new user
-    #   user:
-    #     name: moshe
-    #     group: moshe
-
-    # - name: Create .ssh folder
-    #   file:
-    #     path: /home/moshe/.ssh/
-    #     state: directory
-    #     owner: moshe
-    #     group: moshe
-    #     mode: 0700
-
-    # - name: Generate an "{{ssh_key_filename}}"
-    #   openssh_keypair:
-    #     path: "/home/moshe/.ssh/{{ ssh_key_filename }}"
-    #     size: 2048
-    #     state: present
-    
     - name: Generate an "{{ssh_key_filename}}"
       openssh_keypair:
         path: "/tmp/{{ ssh_key_filename }}"
@@ -30,8 +11,8 @@
         state: present
 
 - name: update the web nodes
-  hosts: web
-  remote_user: root
+  hosts: _web
+  remote_user: ubuntu
   vars:
     ssh_key_filename: id_rsa_opsschool
   become: yes

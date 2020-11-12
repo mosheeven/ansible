@@ -27,7 +27,8 @@ resource "aws_instance" "server" {
   key_name               = var.key
   iam_instance_profile = var.iam_role
   tags = {
-    Name = "Server"
+    Name = "Server",
+    Role = "Ansible-master"
   }
 
   provisioner "file" {
@@ -67,6 +68,7 @@ resource "aws_instance" "nodes" {
   vpc_security_group_ids = [aws_security_group.ansible-sgg.id]
   key_name               = var.key
   tags = {
-    Name = "Node${count.index}"
+    Name = "Node${count.index}",
+    Role = "web"
   }
 }

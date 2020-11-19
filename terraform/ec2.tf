@@ -22,7 +22,7 @@ resource "aws_instance" "server" {
   instance_type = "t2.micro"
   associate_public_ip_address = true
   subnet_id = var.subnet_id
-  user_data = file("../config/install_ansible.sh")
+  user_data = file("../ansible/config/install_ansible.sh")
   vpc_security_group_ids = [aws_security_group.ansible-sgg.id]
   key_name               = var.key
   iam_instance_profile = var.iam_role
@@ -32,7 +32,7 @@ resource "aws_instance" "server" {
   }
 
   provisioner "file" {
-  source      = "../config"
+  source      = "../ansible"
   destination = "/home/ubuntu"
 
   connection {
@@ -45,8 +45,9 @@ resource "aws_instance" "server" {
 
   provisioner "remote-exec" {
     inline = [
-      "bash /home/ubuntu/config/install_ansible.sh",
-      "ansible-playbook /home/ubuntu/config/configure-host.yml"
+      "chmod +x /home/ubuntu/ansible/config/install_ansible.sh",
+      "bash /home/ubuntu/ansible/config/install_ansible.sh",
+      "ansible-playbook /home/ubuntu/ansible/playbooks/configure-host.yml"
     ]
     
   connection {

@@ -1,6 +1,6 @@
 ---
 - name: install docker
-  hosts: _web
+  hosts: _Role_web
   remote_user: ubuntu
   become: yes
 
@@ -15,7 +15,6 @@
       - runc
       state: absent
 
-
   - name: update https
     apt: 
       pkg:
@@ -24,6 +23,7 @@
       - curl
       - gnupg-agent
       - software-properties-common
+      - python3-pip
       state: present
 
   - name: Add Docker’s official GPG key
@@ -47,13 +47,21 @@
     notify: 
     - restart docker
 
+  - name: install docker-py
+    pip:
+      name: docker-py
+
   - name: Add ubuntu user to docker group
     user:
       name: ubuntu
       group: docker
-  
-  - name: start nginx on docker
-    shell: docker run -d -p 8080:80 nginx
+
+  - name: start nginx server
+    docker_container:
+      name: nginx
+      image: nginx
+      ports:
+        - 8080:80
 
   handlers:
     - name: restart docker

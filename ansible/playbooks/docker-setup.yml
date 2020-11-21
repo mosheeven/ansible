@@ -1,7 +1,14 @@
 ---
 - name: install docker
-  hosts: _Role_web
+  hosts: _Role_web:&_Os_ubuntu
   roles: 
     - docker
   remote_user: ubuntu
+  become: yes
+
+- name: install docker
+  hosts: _Role_web:&_Os_centos
+  roles: 
+    - docker
+  remote_user: ec2-user
   become: yes

@@ -47,7 +47,7 @@ resource "aws_instance" "server" {
     inline = [
       "chmod +x /home/ubuntu/ansible/config/install_ansible.sh",
       "bash /home/ubuntu/ansible/config/install_ansible.sh",
-      "ansible-playbook /home/ubuntu/ansible/playbooks/configure-host.yml"
+      # "ansible-playbook /home/ubuntu/ansible/playbooks/configure-host.yml"
     ]
     
   connection {
@@ -61,7 +61,7 @@ resource "aws_instance" "server" {
 }
 
 resource "aws_instance" "nodes" {
-  count =2 
+  count =2
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   associate_public_ip_address = true
@@ -70,6 +70,22 @@ resource "aws_instance" "nodes" {
   key_name               = var.key
   tags = {
     Name = "Node${count.index}",
-    Role = "web"
+    Role = "web",
+    Os = "ubuntu"
+  }
+}
+
+resource "aws_instance" "nodes_centos" {
+  count =1
+  ami           = "ami-01e78c5619c5e68b4"
+  instance_type = "t2.micro"
+  associate_public_ip_address = true
+  subnet_id = var.subnet_id
+  vpc_security_group_ids = [aws_security_group.ansible-sgg.id]
+  key_name               = var.key
+  tags = {
+    Name = "Node${count.index}",
+    Role = "web",
+    Os = "centos"
   }
 }

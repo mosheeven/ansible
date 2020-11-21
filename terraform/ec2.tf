@@ -14,6 +14,22 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+data "aws_ami" "centos" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["RHEL-8.3.0_HVM-20201031-x86_64*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["309956199498"] # Canonical
+}
+
 ## ec2
 
 resource "aws_instance" "server" {
@@ -22,7 +38,7 @@ resource "aws_instance" "server" {
   instance_type = "t2.micro"
   associate_public_ip_address = true
   subnet_id = var.subnet_id
-  user_data = file("../config/install_ansible.sh")
+  user_data = file("../ansible/config/install_ansible.sh")
   vpc_security_group_ids = [aws_security_group.ansible-sgg.id]
   key_name               = var.key
   iam_instance_profile = var.iam_role
@@ -32,7 +48,7 @@ resource "aws_instance" "server" {
   }
 
   provisioner "file" {
-  source      = "../config"
+  source      = "../ansible"
   destination = "/home/ubuntu"
 
   connection {
@@ -45,8 +61,9 @@ resource "aws_instance" "server" {
 
   provisioner "remote-exec" {
     inline = [
-      "bash /home/ubuntu/config/install_ansible.sh",
-      "ansible-playbook /home/ubuntu/config/configure-host.yml"
+      "chmod +x /home/ubuntu/ansible/config/install_ansible.sh",
+      "bash /home/ubuntu/ansible/config/install_ansible.sh",
+      # "ansible-playbook /home/ubuntu/ansible/playbooks/configure-host.yml"
     ]
     
   connection {
@@ -59,8 +76,8 @@ resource "aws_instance" "server" {
 
 }
 
-resource "aws_instance" "nodes" {
-  count =2 
+resource "aws_instance" "nodes_ubuntu" {
+  count = 1
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   associate_public_ip_address = true
@@ -69,6 +86,22 @@ resource "aws_instance" "nodes" {
   key_name               = var.key
   tags = {
     Name = "Node${count.index}",
-    Role = "web"
+    Role = "web",
+    Os = "ubuntu"
+  }
+}
+
+resource "aws_instance" "nodes_centos" {
+  count =1
+  ami           = data.aws_ami.centos.id
+  instance_type = "t2.micro"
+  associate_public_ip_address = true
+  subnet_id = var.subnet_id
+  vpc_security_group_ids = [aws_security_group.ansible-sgg.id]
+  key_name               = var.key
+  tags = {
+    Name = "Node${count.index}",
+    Role = "web",
+    Os = "centos"
   }
 }

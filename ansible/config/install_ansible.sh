@@ -7,4 +7,4 @@ sudo pip3 install ansible
 
 sudo pip3 install boto3
 sudo apt update -y 
-sudo apt-get install -y python3-botocore
+# sudo apt-get install -y python3-botocore

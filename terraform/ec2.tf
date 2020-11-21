@@ -14,6 +14,22 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+data "aws_ami" "centos" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["RHEL-8.3.0_HVM-20201031-x86_64*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["309956199498"] # Canonical
+}
+
 ## ec2
 
 resource "aws_instance" "server" {
@@ -60,8 +76,8 @@ resource "aws_instance" "server" {
 
 }
 
-resource "aws_instance" "nodes" {
-  count =2
+resource "aws_instance" "nodes_ubuntu" {
+  count = 1
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   associate_public_ip_address = true
@@ -77,7 +93,7 @@ resource "aws_instance" "nodes" {
 
 resource "aws_instance" "nodes_centos" {
   count =1
-  ami           = "ami-01e78c5619c5e68b4"
+  ami           = data.aws_ami.centos.id
   instance_type = "t2.micro"
   associate_public_ip_address = true
   subnet_id = var.subnet_id

@@ -1,2 +1,6 @@
 ---
 # defaults file for docker
+
+docker_vartion: '19.03.13'
+debain_users: [ubuntu, moshe]
+centos_users: [ec2-user, moshe]

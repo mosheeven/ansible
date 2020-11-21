@@ -48,5 +48,6 @@
 
 - name: Add ubuntu user to docker group
   user:
-    name: ubuntu
+    name: "{{ item }}"
     group: docker
+  with_items: "{{ debain_users }}"

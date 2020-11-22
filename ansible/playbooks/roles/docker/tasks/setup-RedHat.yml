@@ -28,26 +28,20 @@
     value: '0'
   become: yes
 
-
 - name: Install Docker
-  package:
-    name: docker-ce
-    state: latest
+  package: 
+    name:
+    - "docker-ce-{{release_version}}"
+    - containerd.io
+    state: present
   become: yes
   notify: 
-        - restart docker
+  - restart docker
 
-- name: Start Docker service
-  service:
-    name: docker
-    state: started
-    enabled: yes
-  become: yes
+- name: install docker-py
+  pip:
+    name: docker-py
 
-- name : install docker-py
-  pip: 
-        name: docker-py
-        
 - name: Add ec2-user user to docker group
   user:
     name: "{{ item }}"

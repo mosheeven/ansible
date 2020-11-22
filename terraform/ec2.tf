@@ -61,8 +61,8 @@ resource "aws_instance" "server" {
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /home/ubuntu/ansible/config/install_ansible.sh",
-      "bash /home/ubuntu/ansible/config/install_ansible.sh",
+      # "chmod +x /home/ubuntu/ansible/config/install_ansible.sh",
+      # "bash /home/ubuntu/ansible/config/install_ansible.sh",
       # "ansible-playbook /home/ubuntu/ansible/playbooks/configure-host.yml"
     ]
     

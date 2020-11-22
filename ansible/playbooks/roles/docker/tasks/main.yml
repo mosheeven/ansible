@@ -1,10 +1,17 @@
----
+---  
 - include_tasks: setup-RedHat.yml
   when: ansible_os_family == 'RedHat'
 
 - include_tasks: setup-Debian.yml
   when: ansible_os_family == 'Debian'
-    
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+  become: yes
+
 - name: start nginx server
   docker_container:
     name: nginx

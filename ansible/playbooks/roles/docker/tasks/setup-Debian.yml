@@ -32,13 +32,13 @@
     state: present
 
 - name: Install Docker
-  apt: 
-    pkg:
-    - docker-ce
-    - docker-ce-cli
+  package: 
+    name:
+    - "docker-ce={{release_version}}"
+    - "docker-ce-cli={{release_version}}"
     - containerd.io
     state: present
-    update_cache: yes
+  become: yes
   notify: 
   - restart docker
 

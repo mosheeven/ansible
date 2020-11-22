@@ -2,9 +2,14 @@
 - name: install docker
   hosts: _Role_web:&_Os_ubuntu
   roles: 
-    - docker
+  - docker
   remote_user: ubuntu
   become: yes
+  vars_prompt:
+  - name: release_version
+    prompt: "What is docker release version? default will be:"
+    private: no
+    default: "5:18.09.0~3-0~ubuntu-bionic"
 
 - name: install docker
   hosts: _Role_web:&_Os_centos
@@ -12,3 +17,8 @@
     - docker
   remote_user: ec2-user
   become: yes
+  vars_prompt:
+  - name: release_version
+    prompt: "What is docker release version? default will be:"
+    private: no
+    default: "3:19.03.13-3.el8"
